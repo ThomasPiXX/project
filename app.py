@@ -45,12 +45,12 @@ def register():
       #check if any required field are empty
 
         if not username or not password or not confirm_password:
-            return apology('required field empty')
+            return flash('required field empty')
 
         #password match
 
         if password != confirm_password:
-           return apology('password dont match')
+           return flash('password dont match')
 
         #hashing the password
 
@@ -59,7 +59,7 @@ def register():
         try:
             db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash)
         except:
-            return apology("Username already exist")
+            return flash("Username already exist")
         # Display a message upon successful registration
 
         flash('You are now registered and can log in!', 'success')
@@ -81,18 +81,18 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return flash("must provide username", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return flash("must provide password", 403)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return flash("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]

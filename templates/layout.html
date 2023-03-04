@@ -5,20 +5,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where you are {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="materialize.css">
 </head>
 <body>
+<nav class="blue-grey">
+    <div class="nav-wrapper container">
+        <a href="/" class="brand-logo">WYA</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            {% if session["user_id"] %}
+                <li><a href="/">Home</a></li>
+                <li><a href="/map">Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/">Home</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
 
-
-
+<ul class="sidenav" id="mobile-demo">
     {% if session["user_id"] %}
+        <li><a href="/">Home</a></li>
+        <li><a href="/profile">Profile</a></li>
+        <li><a href="/logout">Logout</a></li>
     {% else %}
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
     {% endif %}
-    {% if get_flashed_messages() %}
-    {% endif %}
-    {% block main %}{% endblock %}
-    
+</ul>
+
+{% if get_flashed_messages() %}
+    <header>
+        <div class="card-panel red lighten-1">
+            <p class="white-text">{{ get_flashed_messages()[0] }}</p>
+        </div>
+    </header>
+{% endif %}
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems);
+    });
+</script>
+
 </body>
 </html>
