@@ -7,8 +7,8 @@
     <title>Where you are {% block title %}{% endblock %}</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="materialize.css">
+    <link rel="stylesheet" href="C:\Users\tommy\OneDrive\Bureau\#\project\sty.css">
+    <link rel="stylesheet" href="C:\Users\tommy\OneDrive\Bureau\#\project\mater.css">
 </head>
 <body>
 <nav class="blue-grey">
@@ -18,7 +18,7 @@
         <ul class="right hide-on-med-and-down">
             {% if session["user_id"] %}
                 <li><a href="/">Home</a></li>
-                <li><a href="/map">Profile</a></li>
+                <li><a href="/map">Map</a></li>
                 <li><a href="/logout">Logout</a></li>
             {% else %}
                 <li><a href="/">Home</a></li>
@@ -32,7 +32,7 @@
 <ul class="sidenav" id="mobile-demo">
     {% if session["user_id"] %}
         <li><a href="/">Home</a></li>
-        <li><a href="/profile">Profile</a></li>
+        <li><a href="/map">map</a></li>
         <li><a href="/logout">Logout</a></li>
     {% else %}
         <li><a href="/">Home</a></li>
