@@ -36,37 +36,57 @@ def login_required(f):
 #register route
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
     # Get the form data
     if request.method == "POST":
+        # Create a new database connection
+        db = sqlite3.connect('where.db')
+
         username= request.form.get('username')
         password = request.form.get('password')
         confirm_password = request.form.get('confirmation')
 
-      #check if any required field are empty
-
+        #check if any required field are empty
         if not username or not password or not confirm_password:
-            return flash('required field empty')
+            flash('Required field empty')
+            return redirect('/register')
 
         #password match
-
         if password != confirm_password:
-           return flash('password dont match')
+           flash('Passwords do not match')
+           return redirect('/register')
 
         #hashing the password
-
         hash = generate_password_hash(password)
 
         try:
-            db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash)
-        except:
-            return flash("Username already exist")
-        # Display a message upon successful registration
+            # Check if the username already exists in the database
+            result = db.execute("SELECT * FROM users WHERE username = ?", (username,))
+            user = result.fetchone()
+            if user:
+                flash('Username already exists')
+                return redirect('/register')
 
-        flash('You are now registered and can log in!', 'success')
-        return redirect('/login')
+            # If username is not taken, insert the new user into the database
+            db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", (username, hash))
+            db.commit()
+            flash('You are now registered and can log in!', 'success')
+            return redirect('/login')
+
+        except:
+            db.rollback()
+            flash('There was an error while registering. Please try again.')
+            return redirect('/register')
+
+        finally:
+            # Close the database connection
+            db.close()
 
     else:
         return render_template("register.html")
+
+
+
     
     #login route
 @app.route("/login", methods=["GET", "POST"])
@@ -88,7 +108,7 @@ def login():
             return flash("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),)).fetchall()
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
