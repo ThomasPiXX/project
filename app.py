@@ -93,6 +93,9 @@ def register():
 def login():
     """Log user in"""
 
+    # Create a new database connection
+    db = sqlite3.connect('where.db')
+
     # Forget any user_id
     session.clear()
 
@@ -111,14 +114,14 @@ def login():
         rows = db.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),)).fetchall()
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0][2], request.form.get("password")):
             return flash("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0][0]
 
         # Redirect user to home page
-        return redirect("/map")
+        return render_template("map.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
