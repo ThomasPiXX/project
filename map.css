@@ -1,0 +1,37 @@
+body {
+    background-image: url('R.jfif');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+footer{
+    background-color:#FFF8DC ;
+    height: 135px;
+    max-width: 350px;
+
+
+}
+.section {
+    font-size: 15px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    color: #d63384;
+    margin-left: 100px;
+}
+
+.section .button:hover {
+    color: #fff;
+    background-color: #d63384;
+  }
+
+.button {
+    color: #d63384;
+}
+
+#map {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: 50vh;
+    width: 600px;
+    margin-top: 200px;
+  }
