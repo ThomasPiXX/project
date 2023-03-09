@@ -1,35 +1,29 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    buy
+    MAP
 {% endblock %}
 
-{% block main %}
-<main>
-    <div id="map"></div>
-    <section>
-      <h1>Get back Home?</h1>
-      <nav>
-        <a href="index.html" class="button">Click here</a>
-      </nav>
-    </section>
-  </main>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-  <script>
-    var map = L.map('map').setView([42.3770, -71.1167], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+{% block content %}
+    <main>
+        <div id="map"></div>
+    </main>
 
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        L.marker([lat, lng]).addTo(map)
-          .bindPopup("<b>You are here</b><br />").openPopup();
-        map.setView([lat, lng], 13);
-      });
-    }
-  </script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script>
+        var map = L.map('map').setView([42.3770, -71.1167], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                L.marker([lat, lng]).addTo(map)
+                    .bindPopup("<b>You are here</b><br />").openPopup();
+                map.setView([lat, lng], 13);
+            });
+        }
+    </script>
 {% endblock %}
-
