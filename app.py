@@ -116,9 +116,19 @@ def login():
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0][2], request.form.get("password")):
             return flash("invalid username and/or password", 403)
+        
+        #update timestamp coumn with the current date and time 
+        db.execute("UPDATE users SET timestamp = CURRENT_TIMESTAMP WHERE id = ?", (rows[0][0],))
+        db.commit()
 
         # Remember which user has logged in
         session["user_id"] = rows[0][0]
+
+        # save the users location to the database
+        location = request.remote_addr
+        user_id = session.get("user_id")
+        db.execute("UPDATE users SET location = ? WHERE id = ?", (location, user_id))
+        db.commit()
 
         # Redirect user to home page
         return render_template("map.html")
@@ -132,3 +142,12 @@ def login():
 @app.route('/')
 def index():
     return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+    """log user out"""
+
+    session.clear()
+
+    return redirect("/login")
